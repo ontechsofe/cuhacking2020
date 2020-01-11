@@ -1,18 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-content>
+        <v-system-bar color="secondary">
+
+        </v-system-bar>
+        <v-app-bar fixed color="primary" dark>
+            <v-icon left>mdi-brain</v-icon>
+            <v-toolbar-title>APP NAME</v-toolbar-title>
+            <v-spacer/>
+            <v-toolbar-items>
+                <v-btn to="/chat" text>ACTION</v-btn>
+            </v-toolbar-items>
+        </v-app-bar>
+    </v-content>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+<script lang="ts">
+    import Vue from 'vue';
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default Vue.extend({
+        name: 'home',
+        data: () => ({
+        }),
+    });
 </script>
+
+<style>
+
+</style>
