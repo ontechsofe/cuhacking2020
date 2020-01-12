@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS Session (
 	id UUID UNIQUE DEFAULT uuid_generate_v4(),
-	PRIMARY KEY(id)
+	clientID UUID NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(clientID) REFERENCES Client(id)
 );
 SELECT * FROM Session;

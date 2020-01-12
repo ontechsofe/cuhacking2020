@@ -58,7 +58,7 @@ class SQL(object):
 
             client = cursor.fetchall()
         except (Exception, Error) as error :
-            print (f'Error while inserting into table {table_name}', error)
+            print (f'Error logging in user', error)
             if(self.conn):
                 cursor.close()
             return None
@@ -67,5 +67,116 @@ class SQL(object):
                 cursor.close()
         if len(client):
             return client[0]
+        else:
+            return None
+
+    def new_session(self, client_id):
+        table_name = 'Session'
+        session_id = None
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                sql.SQL("""
+                    INSERT INTO Session(clientID)
+                    VALUES (%s);
+                """),
+                [client_id]
+            )
+
+            cursor.execute(
+                sql.SQL("""
+                    SELECT id FROM Session
+                    WHERE clientID=%s
+                """),
+                [client_id]
+            )
+
+            session_id = cursor.fetchall()[-1]
+
+            print(f'Added session ID {session_id}')
+        except (Exception, Error) as error :
+            print (f'Error while starting a new session', error)
+            if(self.conn):
+                cursor.close()
+            return None
+        finally:
+            self.conn.commit()
+            if(self.conn):
+                cursor.close()
+        return session_id
+
+    def message(self, message):
+        table_name0 = 'Interaction'
+        table_name1 = 'Session'
+        table_name2 = 'InteractionSessionRelationship'
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                sql.SQL("""
+                    INSERT INTO Interaction(message, senderID, recipientID, time)
+                    VALUES (%s, %s, %s, %s)
+                """),
+                [message['text'], message['sender'], message['recipient'], message['time']]
+            )
+
+            cursor.execute(
+                sql.SQL("""
+                    SELECT id
+                    FROM Interaction
+                    WHERE time=%s AND senderID=%s AND recipientID=%s
+                """),
+                [message['time'], message['sender'], message['recipient']]
+            )
+            interaction_id = cursor.fetchone()[0]
+
+            cursor.execute(
+                sql.SQL("""
+                    INSERT INTO InteractionSessionRelational(interactionID, sessionID)
+                    VALUES (%s, %s)
+                """),
+                [interaction_id, message['session']]
+            )
+            print(f"Added Interaction from {message['sender']} to {message['recipient']} at {message['time']}")
+
+        except (Exception, Error) as error :
+            print (f'Error while inserting into table.', error)
+            if(self.conn):
+                cursor.close()
+            return False
+        finally:
+            self.conn.commit()
+            if(self.conn):
+                cursor.close()
+        return True
+    
+    def get_messages(self, session_id):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                sql.SQL("""
+                    SELECT message, senderID, recipientID, time
+                    FROM InteractionSessionRelational AS ISR
+                    JOIN Interaction AS I ON ISR.interactionID=I.id
+                    WHERE sessionID=%s
+                """),
+                [session_id]
+            )
+
+            messages = [ {
+                'message': message,
+                'senderID': sender_id,
+                'recipientID': recipient_id,
+                'time': time
+                } for (message, sender_id, recipient_id, time) in cursor.fetchall()]
+        except (Exception, Error) as error :
+            print (f'Error logging in user', error)
+            if(self.conn):
+                cursor.close()
+            return None
+        finally:
+            if(self.conn):
+                cursor.close()
+        if len(messages):
+            return messages
         else:
             return None
