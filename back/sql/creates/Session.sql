@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS Session (
+	id UUID UNIQUE DEFAULT uuid_generate_v4(),
+	PRIMARY KEY(id)
+);
+SELECT * FROM Session;
