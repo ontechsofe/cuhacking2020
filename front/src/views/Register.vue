@@ -10,9 +10,7 @@
                                 <div class="logo pa-6">
                                     <v-icon class="my-5" size="100" color="accent">mdi-brain</v-icon>
                                 </div>
-                                <v-toolbar flat color="primary" dark>
-                                    <v-toolbar-title>Register</v-toolbar-title>
-                                </v-toolbar>
+                                <p class="display-2 text-center primary--text">Register</p>
                                 <v-sheet flat color="transparent" width="100%" class="pa-4">
                                     <v-form>
                                         <v-text-field v-model="name" autofocus outlined placeholder="" label="Name"/>
@@ -29,9 +27,10 @@
         </v-overlay>
     </v-content>
 </template>
-<script lang="ts">
+<script>
     import Vue from 'vue';
     import axios from 'axios';
+    import sha256 from 'sha256';
 
     export default Vue.extend({
         name: 'register',
@@ -41,16 +40,24 @@
             password: ''
         }),
         methods: {
+            hash(data) {
+                return sha256(data);
+            },
             join() {
+                let t = this;
                 console.log(this.username, this.password);
                 axios.post('/register', {
                     name: this.name,
                     username: this.username,
-                    password: this.password
+                    password: this.hash(this.password)
                 }).then(res => {
                     console.log(res);
+                    if (res.data.success) {
+                        t.$router.push('/login');
+                    } else {
+                        // show some error message
+                    }
                 }).catch(e => console.log(e));
-                this.$router.push('/login')
             }
         }
     });

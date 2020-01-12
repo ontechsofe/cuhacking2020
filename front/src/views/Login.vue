@@ -10,15 +10,13 @@
                                 <div class="logo pa-6">
                                     <v-icon class="my-5" size="100" color="accent">mdi-brain</v-icon>
                                 </div>
-                                <v-toolbar flat color="primary" dark>
-                                    <v-toolbar-title>Login</v-toolbar-title>
-                                </v-toolbar>
+                                <p class="display-2 text-center primary--text">Login</p>
                                 <v-sheet flat color="transparent" width="100%" class="pa-4">
                                     <v-form>
-                                        <v-text-field v-model="username" outlined placeholder="" label="Username"/>
-                                        <v-text-field v-model="password" outlined placeholder="" label="Password"
+                                        <v-text-field :disabled="submitting" v-model="username" outlined placeholder="" label="Username"/>
+                                        <v-text-field :disabled="submitting" v-model="password" outlined placeholder="" label="Password"
                                                       type="password"/>
-                                        <v-btn @click="login" block tile x-large color="primary">Login</v-btn>
+                                        <v-btn :loading="submitting" :disabled="submitting" @click="login" block tile x-large color="primary">Login</v-btn>
                                     </v-form>
                                 </v-sheet>
                             </v-card>
@@ -33,29 +31,37 @@
     import Vue from 'vue';
     import axios from 'axios';
     import storage from 'localStorage';
+    import sha256 from 'sha256';
 
     export default Vue.extend({
         name: 'login',
         data: () => ({
             username: '',
-            password: ''
+            password: '',
+            submitting: false
         }),
         methods: {
+            hash(data) {
+                return sha256(data);
+            },
             login() {
-                axios.post('/auth', {
+                this.submitting = true;
+                axios.post('/login', {
                     username: this.username,
-                    password: this.password
+                    password: this.hash(this.password)
                 }).then(res => {
-                    console.log(res);
-                    storage.clear();
-                    storage.setItem('token', 'tokencodehere');
-                    // response might also include the type of user to indicate where to redirect
-                    /**
-                     * this.$router.push('/home/patient')
-                     * this.$router.push('/home/therapist')
-                     */
-                }).catch(e => console.log(e));
-                this.$router.push('/home/patient')
+                    if (res.data.success && res.data.clientID) {
+                        storage.clear();
+                        storage.setItem('token', res.data.clientID);
+                        this.$router.push('/new-session')
+                    } else {
+                        // show some type of error message
+                        this.submitting = false;
+                    }
+                }).catch(e => {
+                    console.log(e);
+                    this.submitting = false;
+                });
             }
         }
     })

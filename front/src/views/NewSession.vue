@@ -17,17 +17,27 @@
 <script>
     import Vue from 'vue';
     import storage from 'localStorage';
+    import axios from 'axios';
 
     export default Vue.extend({
-        name: 'logout',
+        name: 'new-session',
         data: () => ({
         }),
         mounted() {
-            setTimeout(() => {
-                // clear the session token here
-                storage.clear();
-                this.$router.push('/');
-            }, 1000);
+            let t = this;
+            axios.post('/start', {
+                clientID: storage.getItem('token')
+            }).then(res => {
+                if (res.data.success && res.data.sessionID) {
+                    storage.setItem('session', res.data.sessionID);
+                    t.$router.push('/home/patient');
+                } else {
+                    t.$router.push('/login');
+                }
+            }).catch(e => {
+                console.log(e);
+                t.$router.push('/login');
+            })
         }
     });
 </script>

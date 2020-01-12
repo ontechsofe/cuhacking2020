@@ -27,6 +27,11 @@ const routes = [
     component: () => import('../views/Logout.vue')
   },
   {
+    path: '/new-session',
+    name: 'new-session',
+    component: () => import('../views/NewSession.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import('../views/Register.vue')

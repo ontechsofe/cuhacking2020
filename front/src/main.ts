@@ -15,7 +15,7 @@ Vue.config.productionTip = false;
 
 const PROD = false;
 
-axios.defaults.baseURL = (PROD ? '' : 'http://localhost:5000/');
+axios.defaults.baseURL = (PROD ? '' : 'http://9158a429.ngrok.io/');
 
 Vue.prototype.$appName = 'App Name';
 

@@ -2,12 +2,13 @@
     <v-dialog v-model="dialog" width="500">
         <template v-slot:activator="{ on }">
             <v-sheet class="mb-5 text-center" width="100vw" tile color="transparent">
-                <p>{{ time }}</p>
                 <div v-if="message.type === 0" class="message-left text-left">
-                    <v-sheet v-on="on" dark color="accent" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.txt }}</v-sheet>
+                    <v-sheet v-on="on" dark color="accent" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.message }}</v-sheet>
+                    <p class="ml-5 grey--text">{{ time }}</p>
                 </div>
                 <div v-else-if="message.type === 1" class="message-right text-right">
-                    <v-sheet v-on="on" dark color="primary" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.txt }}</v-sheet>
+                    <v-sheet v-on="on" dark color="primary" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.message }}</v-sheet>
+                    <p class="mr-5 grey--text">{{ time }}</p>
                 </div>
             </v-sheet>
         </template>
