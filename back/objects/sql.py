@@ -113,10 +113,10 @@ class SQL(object):
             cursor = self.conn.cursor()
             cursor.execute(
                 sql.SQL("""
-                    INSERT INTO Interaction(message, senderID, recipientID, time)
-                    VALUES (%s, %s, %s, %s)
+                    INSERT INTO Interaction(message, senderID, recipientID, time, sentiment)
+                    VALUES (%s, %s, %s, %s, %s)
                 """),
-                [message['text'], message['sender'], message['recipient'], message['time']]
+                [message['text'], message['sender'], message['recipient'], message['time'], message['sentiment']]
             )
 
             cursor.execute(
@@ -178,5 +178,80 @@ class SQL(object):
                 cursor.close()
         if len(messages):
             return messages
+        else:
+            return None
+
+    # EVERYTHING DOWN HERE FOR THERAPISTS
+    def get_clients(self):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                sql.SQL("""
+                    SELECT id, name
+                    FROM Client
+                    WHERE name!=%s
+                """),
+                ['Melanie']
+            )
+
+            clients = [ {
+                'clientID': client_id,
+                'clientName': client_name
+                } for (client_id, client_name) in cursor.fetchall()]
+        except (Exception, Error) as error :
+            print (f'Error logging in user', error)
+            if(self.conn):
+                cursor.close()
+            return None
+        finally:
+            if(self.conn):
+                cursor.close()
+        if len(clients):
+            return clients
+        else:
+            return None
+    
+    def all_messages(self, client_id):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                sql.SQL("""
+                    SELECT sessionId, message, senderID, recipientID, time, sentiment
+                    FROM InteractionSessionRelational AS ISR
+                    JOIN Interaction AS I ON ISR.interactionID=I.id
+                    WHERE senderID=%s OR recipientID=%s
+                """),
+                [client_id, client_id]
+            )
+
+            messages = [ {
+                'sessionID': session_id,
+                'message': message,
+                'senderID': sender_id,
+                'recipientID': recipient_id,
+                'time': time,
+                'sentiment': sentiment
+                } for (session_id, message, sender_id, recipient_id, time, sentiment) in cursor.fetchall()]
+
+            cursor.execute(
+                sql.SQL("""
+                    SELECT id
+                    FROM Session
+                    WHERE clientID=%s
+                """),
+                [client_id]
+            )
+            session_ids = [x[0] for x in cursor.fetchall()]
+            
+        except (Exception, Error) as error :
+            print (f'Error getting all messages', error)
+            if(self.conn):
+                cursor.close()
+            return None
+        finally:
+            if(self.conn):
+                cursor.close()
+        if len(messages):
+            return messages, session_ids
         else:
             return None
