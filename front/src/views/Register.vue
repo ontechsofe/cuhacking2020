@@ -8,7 +8,7 @@
                         <v-col cols="12" sm="8" md="4">
                             <v-card width="350" class="" tile elevation="5" light>
                                 <div class="logo pa-6">
-                                    <v-icon class="my-5" size="100" color="accent">mdi-brain</v-icon>
+                                    <v-icon class="my-5" size="100" color="accent">mdi-leaf</v-icon>
                                 </div>
                                 <p class="display-2 text-center primary--text">Register</p>
                                 <v-sheet flat color="transparent" width="100%" class="pa-4">

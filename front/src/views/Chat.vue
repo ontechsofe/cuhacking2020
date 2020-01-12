@@ -1,22 +1,25 @@
 <template>
     <v-content>
         <v-app-bar fixed color="primary" dark>
-            <v-icon left>mdi-brain</v-icon>
-            <v-toolbar-title>{{ $appName }}</v-toolbar-title>
+            <v-icon left>mdi-leaf</v-icon>
+            <v-toolbar-title>Melanie</v-toolbar-title>
             <v-spacer/>
             <v-toolbar-items>
-                <v-btn to="/logout" text>
-                    <v-icon left>mdi-logout</v-icon>
-                    Logout
+                <v-btn to="/phone" text>
+                    <v-icon left>mdi-phone</v-icon>
+                    Help
+                </v-btn>
+                <v-btn to="/logout" icon>
+                    <v-icon>mdi-logout</v-icon>
                 </v-btn>
             </v-toolbar-items>
         </v-app-bar>
-        <v-divider class="my-10" />
-        <div class="message-container pt-10" @scroll.passive="checkScroll">
+        <v-divider class="my-10"/>
+        <div class="message-container">
             <message v-for="(message, index) in messageData" v-bind:key="index" v-bind:message="message"/>
         </div>
-        <v-divider class="my-10" />
-        <v-footer fixed>
+        <div id="bottom"></div>
+        <v-footer fixed elevation="5">
             <v-text-field :disabled="sending" v-model="message" placeholder="Type a message here..."/>
             <v-btn :loading="sending" @click="sendMessage" icon color="accent">
                 <v-icon>mdi-send</v-icon>
@@ -49,27 +52,10 @@
         mounted() {
             let t = this;
             t.getMessages();
-            t.$nextTick(() => {
-                t.scrollToBottom();
-            })
-        },
-        watch: {
-            messages: () => {
-                let t = this;
-                t.$nextTick(() => {
-                    t.scrollToBottom();
-                })
-            }
         },
         methods: {
-            checkScroll (e) {
-                const el = e.target;
-                this.bottomed = (el.scrollHeigh - (el.offsetHeight + el.scrollTop) < 10)
-            },
             scrollToBottom() {
-                if (this.chatEl && this.bottomed) {
-                    this.chatEl.scrollTop = this.chartEl.scrollHeight - this.chartEl.offsetHeight;
-                }
+                document.getElementById('bottom').scrollIntoView();
             },
             getMessages() {
                 let t = this;
@@ -85,7 +71,7 @@
                             time: e.time
                         }
                     });
-                    t.messages
+                    t.scrollToBottom();
                 }).catch(e => {
                     console.log(e);
                 })
@@ -116,10 +102,10 @@
 <style>
     .message-container {
         width: 100vw;
-        height: 90%;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
         align-items: center;
+        margin-bottom: 60px;
     }
 </style>

@@ -3,13 +3,6 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter);
 
-/**
- * 1. Landing Page
- * 2. Login / Register
- * 3. logged in user home -> chat interface
- *
- */
-
 const routes = [
   {
     path: '/',
@@ -44,7 +37,7 @@ const routes = [
   {
     path: '/home/therapist',
     name: 'home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/TherapistDashboard.vue')
   },
 ];
 
