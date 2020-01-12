@@ -16,7 +16,7 @@ bad_responses = [
 
 start_conversation = [
     'Hi Melanie. Can we talk?',
-    'Hey Mel. Do you have a couple minutes to talk?',
+    'Hey Melanie! Do you have a couple minutes to talk?',
     'Hi there! Do you want to hear about my day?',
     'Hey there Mel! Are you busy?',
     'Hi Melanie! Do you have a couple moments?'
@@ -28,4 +28,9 @@ start_conversation_responses = [
     'Absolutely! Anytime you need to talk I am available :) How was your day?',
     'I have all the time in the world for you! Tell me about your day :)',
     'I can\'t wait to hear about your day! I have all the time in the world in here!'
+]
+
+ordering = [
+    'Hey Melanie! Do you have a couple minutes to talk?',
+    'I really have been having a tough time recently. My dog just died and my girlfriend just broke up with me. I want to keep smiling but it\s really hard. I hope everything gets better.'
 ]

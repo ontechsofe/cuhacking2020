@@ -133,4 +133,4 @@ if __name__ == '__main__':
     sql = SQL(DB_CONFIG)
     model = Model(MODEL_CONFIG)
 
-    app.run(debug=True)
+    app.run(debug=False)
