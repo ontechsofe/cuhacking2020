@@ -1,19 +1,21 @@
 <template>
     <v-content>
-        <v-system-bar color="secondary">
-
-        </v-system-bar>
         <v-app-bar fixed color="primary" dark>
             <v-icon left>mdi-brain</v-icon>
-            <v-toolbar-title>APP NAME</v-toolbar-title>
+            <v-toolbar-title>{{ $appName }}</v-toolbar-title>
             <v-spacer/>
             <v-toolbar-items>
-                <v-btn text>ACTION</v-btn>
+                <v-btn to="/logout" text>
+                    <v-icon left>mdi-logout</v-icon>
+                    Logout
+                </v-btn>
             </v-toolbar-items>
         </v-app-bar>
-        <div class="message-container">
+        <v-divider class="my-10" />
+        <div class="message-container pt-10" v-chat-scroll>
             <message v-for="(message, index) in messageData" v-bind:key="index" v-bind:message="message"/>
         </div>
+        <v-divider class="my-10" />
         <v-footer fixed>
             <v-text-field placeholder="Type a message here..."/>
             <v-btn icon color="accent">
@@ -22,73 +24,43 @@
         </v-footer>
     </v-content>
 </template>
-<script lang="ts">
+<script>
     import Vue from 'vue';
+    import storage from 'localStorage';
 
     export default Vue.extend({
         name: 'home',
         components: {
             message: () => import('../components/Message.vue')
         },
+        computed: {
+            messageData() {
+                return [
+                    {
+                        type: 0,
+                        txt: "HEY FRIEND",
+                        from: {},
+                        to: {},
+                        time: 0,
+                    },
+                    {
+                        type: 1,
+                        txt: "HEY FRIEND",
+                        from: {},
+                        to: {},
+                        time: new Date().valueOf(),
+                    }
+                ]
+            }
+        },
         data: () => ({
-            messageData: [
-                {
-                    type: 0,
-                    txt: "HEY FRIEND",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 1,
-                    txt: "hey twitter world",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 0,
-                    txt: "how are you",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 1,
-                    txt: "good n' u?",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 0,
-                    txt: "good n' u?",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 0,
-                    txt: "i am very good, this is a very long message to see how it handles word wrap",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-                {
-                    type: 1,
-                    txt: "wow, that is very cool! it looks like it can handle a very long message and not overflow the container",
-                    from: {},
-                    to: {},
-                    time: 0,
-                },
-            ]
         }),
     });
 </script>
 <style>
     .message-container {
         width: 100vw;
-        height: 85%;
+        height: 90%;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;

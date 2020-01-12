@@ -1,7 +1,7 @@
 <template>
     <v-content>
         <v-img class="blur" height="100vh" src="../assets/desk.jpg"/>
-        <v-overlay :absolute="absolute" :value="overlay">
+        <v-overlay absolute :value="true">
             <v-container class="fill-height" fluid>
                 <v-container>
                     <v-row align="center" justify="center">
@@ -10,8 +10,7 @@
                                 <div class="logo mb-6">
                                     <v-icon class="my-5" size="100" color="accent">mdi-brain</v-icon>
                                     <div>
-                                        <span class="font-weight-bold display-1 primary--text">THING</span>
-                                        <span class="display-1 primary--text">THING</span>
+                                        <span class="display-1 primary--text">{{ $appName }}</span>
                                     </div>
                                 </div>
                                 <p>
@@ -21,7 +20,7 @@
                                     rhoncus molestie.
                                 </p>
                                 <v-btn to="/register" class="my-7" block tile color="primary" x-large>Get Started</v-btn>
-                                <v-btn block tile text color="secondary">Login</v-btn>
+                                <v-btn block tile text color="secondary" to="/login">Login</v-btn>
                             </v-card>
                         </v-col>
                     </v-row>

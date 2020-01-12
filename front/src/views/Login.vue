@@ -11,14 +11,14 @@
                                     <v-icon class="my-5" size="100" color="accent">mdi-brain</v-icon>
                                 </div>
                                 <v-toolbar flat color="primary" dark>
-                                    <v-toolbar-title>Register</v-toolbar-title>
+                                    <v-toolbar-title>Login</v-toolbar-title>
                                 </v-toolbar>
                                 <v-sheet flat color="transparent" width="100%" class="pa-4">
                                     <v-form>
-                                        <v-text-field v-model="name" autofocus outlined placeholder="" label="Name"/>
                                         <v-text-field v-model="username" outlined placeholder="" label="Username"/>
-                                        <v-text-field v-model="password" outlined placeholder="" label="Password" type="password"/>
-                                        <v-btn @click="join" block tile x-large color="primary">Join</v-btn>
+                                        <v-text-field v-model="password" outlined placeholder="" label="Password"
+                                                      type="password"/>
+                                        <v-btn @click="login" block tile x-large color="primary">Login</v-btn>
                                     </v-form>
                                 </v-sheet>
                             </v-card>
@@ -29,31 +29,36 @@
         </v-overlay>
     </v-content>
 </template>
-<script lang="ts">
+<script>
     import Vue from 'vue';
     import axios from 'axios';
+    import storage from 'localStorage';
 
     export default Vue.extend({
-        name: 'register',
+        name: 'login',
         data: () => ({
-            name: '',
             username: '',
             password: ''
         }),
         methods: {
-            join() {
-                console.log(this.username, this.password);
-                axios.post('/register', {
-                    name: this.name,
+            login() {
+                axios.post('/auth', {
                     username: this.username,
                     password: this.password
                 }).then(res => {
                     console.log(res);
+                    storage.clear();
+                    storage.setItem('token', 'tokencodehere');
+                    // response might also include the type of user to indicate where to redirect
+                    /**
+                     * this.$router.push('/home/patient')
+                     * this.$router.push('/home/therapist')
+                     */
                 }).catch(e => console.log(e));
-                this.$router.push('/login')
+                this.$router.push('/home/patient')
             }
         }
-    });
+    })
 </script>
 <style>
     .logo {

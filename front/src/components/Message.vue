@@ -1,12 +1,13 @@
 <template>
     <v-dialog v-model="dialog" width="500">
         <template v-slot:activator="{ on }">
-            <v-sheet class="mb-5" width="100vw" tile color="transparent">
-                <div v-on="on" v-if="message.type === 0" class="message-left">
-                    <v-sheet dark color="accent" class="mx-4 pa-2" width="50vw" elevation="2">{{ message.txt }}</v-sheet>
+            <v-sheet class="mb-5 text-center" width="100vw" tile color="transparent">
+                <p>{{ time }}</p>
+                <div v-if="message.type === 0" class="message-left text-left">
+                    <v-sheet v-on="on" dark color="accent" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.txt }}</v-sheet>
                 </div>
-                <div v-on="on" v-else-if="message.type === 1" class="message-right">
-                    <v-sheet dark color="primary" class="mx-4 pa-2" width="50vw" elevation="2">{{ message.txt }}</v-sheet>
+                <div v-else-if="message.type === 1" class="message-right text-right">
+                    <v-sheet v-on="on" dark color="primary" class="mx-4 pa-2" max-width="50vw" elevation="2">{{ message.txt }}</v-sheet>
                 </div>
             </v-sheet>
         </template>
@@ -35,8 +36,9 @@
     </v-dialog>
 
 </template>
-<script lang="ts">
+<script>
     import Vue from 'vue';
+    import moment from 'moment';
 
     export default Vue.extend({
         props: ['message'],
@@ -44,8 +46,15 @@
         data: () => ({
             dialog: false
         }),
+        computed: {
+            time() {
+                return moment(this.message.time).format("h:mm:ss a")
+            }
+        },
         mounted() {
-            console.log(this.message)
+            let x = setInterval(() => {
+                document.body.scrollTop = document.body.offsetHeight;
+            }, 100);
         }
     });
 </script>

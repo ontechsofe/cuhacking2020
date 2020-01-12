@@ -17,19 +17,29 @@ const routes = [
     component: () => import('../views/Landing.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: () => import('../views/Logout.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import('../views/Register.vue')
   },
   {
-    path: '/home',
-    name: 'home',
-    component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/chat',
+    path: '/home/patient',
     name: 'chat',
     component: () => import('../views/Chat.vue')
+  },
+  {
+    path: '/home/therapist',
+    name: 'home',
+    component: () => import('../views/Home.vue')
   },
 ];
 
