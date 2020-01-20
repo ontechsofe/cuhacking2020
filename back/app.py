@@ -99,9 +99,9 @@ def get_messages():
         if messages:
             return {'messages': messages, 'success': True}, 200
         else:
-            return {'messages': None, 'success': False}, 400
+            return {'messages': [], 'success': False}, 200
     except:
-        return {'messages': None, 'success': False}, 400
+        return {'messages': [], 'success': False}, 200
 
 
 
